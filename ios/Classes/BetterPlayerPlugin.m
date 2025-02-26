@@ -291,7 +291,7 @@ bool _remoteCommandsInitialized = false;
     } else if ([@"create" isEqualToString:call.method]) {
         BetterPlayer* player = [[BetterPlayer alloc] initWithFrame:CGRectZero];
         // if arguments include "manageAudioSession", read as an NSNumber or BOOL
-        bool manageAudioSession = true; 
+        bool manageAudioSession = YES;
         if ([call.arguments objectForKey:@"manageAudioSession"]) {
             manageAudioSession = [[call.arguments objectForKey:@"manageAudioSession"] boolValue];
         }
