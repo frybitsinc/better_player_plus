@@ -290,6 +290,16 @@ bool _remoteCommandsInitialized = false;
         result(nil);
     } else if ([@"create" isEqualToString:call.method]) {
         BetterPlayer* player = [[BetterPlayer alloc] initWithFrame:CGRectZero];
+        // if arguments include "manageAudioSession", read as an NSNumber or BOOL
+        bool manageAudioSession = true; 
+        if ([call.arguments objectForKey:@"manageAudioSession"]) {
+            manageAudioSession = [[call.arguments objectForKey:@"manageAudioSession"] boolValue];
+        }
+        // pass "manageAudioSession" value to the player
+        player.manageAudioSession = manageAudioSession;
+        // also set value to setMixWithOthers
+        [player setMixWithOthers:true]; 
+        // store and return value
         [self onPlayerSetup:player result:result];
     } else {
         NSDictionary* argsMap = call.arguments;

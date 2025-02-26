@@ -19,6 +19,10 @@ API_AVAILABLE(ios(9.0))
 AVPictureInPictureController *_pipController;
 #endif
 
+@interface BetterPlayer ()
+@property (nonatomic, assign) BOOL manageAudioSession;
+@end
+
 @implementation BetterPlayer
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super init];
@@ -33,6 +37,7 @@ AVPictureInPictureController *_pipController;
         _player.automaticallyWaitsToMinimizeStalling = false;
     }
     self._observersAdded = false;
+    self.manageAudioSession = YES;  // Default to true
     return self;
 }
 
@@ -485,6 +490,9 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 }
 
 - (void)play {
+    if (self.manageAudioSession) {
+        [[AVAudioSession sharedInstance] setActive:YES error:nil];
+    }
     _stalledCount = 0;
     _isStalledCheckStarted = false;
     _isPlaying = true;
@@ -710,13 +718,23 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 }
 
 - (void)setMixWithOthers:(bool)mixWithOthers {
-  if (mixWithOthers) {
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback
-                                     withOptions:AVAudioSessionCategoryOptionMixWithOthers
-                                           error:nil];
-  } else {
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
-  }
+    // 1) If manageAudioSession == NO, skip messing with the AVAudioSession
+    if (!self.manageAudioSession) {
+        NSLog(@"[BetterPlayer] manageAudioSession=NO => Skipping setMixWithOthers");
+        return;
+    }
+
+    // 2) Otherwise do exactly what it did before
+    if (mixWithOthers) {
+        [[AVAudioSession sharedInstance]
+            setCategory:AVAudioSessionCategoryPlayback
+            withOptions:AVAudioSessionCategoryOptionMixWithOthers
+            error:nil];
+    } else {
+        [[AVAudioSession sharedInstance]
+            setCategory:AVAudioSessionCategoryPlayback
+            error:nil];
+    }
 }
 
 

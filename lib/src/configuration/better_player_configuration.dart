@@ -118,6 +118,11 @@ class BetterPlayerConfiguration {
   ///Default value is false.
   final bool useRootNavigator;
 
+  /// If true, Better Player will manage the iOS audio session 
+  /// (setting AVAudioSession category, etc.). If false, 
+  /// you must manually handle it in your own iOS code.
+  final bool manageAudioSession;
+
   const BetterPlayerConfiguration({
     this.aspectRatio,
     this.autoPlay = false,
@@ -156,6 +161,7 @@ class BetterPlayerConfiguration {
     this.autoDispose = true,
     this.expandToFill = true,
     this.useRootNavigator = false,
+    this.manageAudioSession = true, 
   });
 
   BetterPlayerConfiguration copyWith({
@@ -188,6 +194,7 @@ class BetterPlayerConfiguration {
     bool? autoDispose,
     bool? expandToFill,
     bool? useRootNavigator,
+    bool? manageAudioSession,
   }) {
     return BetterPlayerConfiguration(
       aspectRatio: aspectRatio ?? this.aspectRatio,
@@ -228,6 +235,7 @@ class BetterPlayerConfiguration {
       autoDispose: autoDispose ?? this.autoDispose,
       expandToFill: expandToFill ?? this.expandToFill,
       useRootNavigator: useRootNavigator ?? this.useRootNavigator,
+      manageAudioSession: manageAudioSession ?? this.manageAudioSession,
     );
   }
 }
