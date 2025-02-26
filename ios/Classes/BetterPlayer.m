@@ -20,7 +20,6 @@ AVPictureInPictureController *_pipController;
 #endif
 
 @interface BetterPlayer ()
-@property (nonatomic, assign) BOOL manageAudioSession;
 @end
 
 @implementation BetterPlayer
